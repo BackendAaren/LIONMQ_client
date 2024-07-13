@@ -97,4 +97,24 @@ export class MessageQueueClient {
     });
     req.end();
   }
+  setNodes(nodes, backupNodes) {
+    const options = {
+      ...this.options,
+      path: `/set-nodes`,
+      method: "POST",
+    };
+
+    const req = http.request(options, (res) => {
+      console.log(`Status Code : ${res.statusCode}`);
+      res.setEncoding("utf-8");
+      res.on("data", (data) => {
+        console.log(`Response: ${data}`);
+      });
+    });
+    req.on("error", (error) => {
+      console.error(`Error: ${error.message}`);
+    });
+    req.write(JSON.stringify({ nodes, backupNodes }));
+    req.end();
+  }
 }
